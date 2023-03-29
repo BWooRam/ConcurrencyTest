@@ -16,6 +16,7 @@ import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.consume
 import kotlinx.coroutines.channels.consumeEach
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
 import kotlin.random.Random
@@ -64,10 +65,19 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        viewModel.updateDeviceData.observe(this@MainActivity){
+        /*viewModel.updateDeviceData.observe(this@MainActivity){
             Handler(Looper.getMainLooper()).post {
                 Log.d("MainActivity", "updateDeviceData topicMessage = $it")
                 topicRvAdapter?.update(it)
+            }
+        }*/
+
+        GlobalScope.launch {
+            viewModel.sharedFlow.collect{
+                Handler(Looper.getMainLooper()).post {
+                    Log.d("MainActivity", "updateDeviceData topicMessage = $it")
+                    topicRvAdapter?.update(it)
+                }
             }
         }
 
