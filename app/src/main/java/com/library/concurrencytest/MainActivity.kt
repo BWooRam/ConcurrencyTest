@@ -9,6 +9,7 @@ import com.library.concurrencytest.databinding.ActivityMainBinding
 import com.library.concurrencytest.test.DeviceStatus
 import com.library.concurrencytest.test.TopicMessage
 import com.library.concurrencytest.test.Worker
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.channels.Channel
@@ -20,7 +21,7 @@ import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private val worker: Worker = Worker()
+    private val worker: Worker = Worker(Dispatchers.IO)
     private val messageChannel = Channel<TopicMessage>(10, BufferOverflow.DROP_OLDEST)
     private val count = 20
     private var topicRvAdapter:TopicRvAdapter? = null
@@ -30,6 +31,11 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        worker
+            .many(count)
+            .interval(1000)
+            .job(getTestRunnableList())
 
         initEvent()
         initView()
@@ -58,11 +64,7 @@ class MainActivity : AppCompatActivity() {
             if (worker.isStart())
                 return@setOnClickListener
 
-            worker
-                .many(count)
-                .interval(10)
-                .job(getTestRunnableList())
-                .work()
+                worker.work()
         }
 
         binding.btn2.setOnClickListener {

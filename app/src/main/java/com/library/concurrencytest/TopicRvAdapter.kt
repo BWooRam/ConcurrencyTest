@@ -8,6 +8,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.library.concurrencytest.test.DeviceStatus
 import com.library.concurrencytest.test.TopicMessage
@@ -56,7 +57,7 @@ class TopicRvAdapter: RecyclerView.Adapter<TopicRvAdapter.TopicViewHolder>() {
         notifyDataSetChanged()
     }
 
-    inner class TopicViewHolder(
+    class TopicViewHolder(
         itemView:View
     ): RecyclerView.ViewHolder(itemView) {
         private val cl:ConstraintLayout = itemView.findViewById(R.id.cl)
@@ -72,30 +73,30 @@ class TopicRvAdapter: RecyclerView.Adapter<TopicRvAdapter.TopicViewHolder>() {
 
             when(topicMessage.status){
                 DeviceStatus.Connect -> {
-                    cl.setBackgroundResource(R.color.white)
+                    cl.setBackgroundColor(ContextCompat.getColor(cl.context,R.color.white))
                     ivIcon.alpha = 1.0f
                     btn1.isEnabled = true
                     btn2.isEnabled = true
-                    btn1.setBackgroundResource(R.color.purple_500)
-                    btn2.setBackgroundResource(R.color.purple_500)
+                    btn1.setBackgroundColor(ContextCompat.getColor(btn1.context,R.color.purple_500))
+                    btn2.setBackgroundColor(ContextCompat.getColor(btn2.context,R.color.purple_500))
                 }
 
                 DeviceStatus.Lost -> {
-                    cl.setBackgroundResource(R.color.red1)
+                    cl.setBackgroundColor(ContextCompat.getColor(cl.context,R.color.red1))
                     ivIcon.alpha = 0.2f
                     btn1.isEnabled = false
                     btn2.isEnabled = false
-                    btn1.setBackgroundResource(R.color.gray)
-                    btn2.setBackgroundResource(R.color.gray)
+                    btn1.setBackgroundColor(ContextCompat.getColor(btn1.context,R.color.gray))
+                    btn2.setBackgroundColor(ContextCompat.getColor(btn2.context,R.color.gray))
                 }
 
                 DeviceStatus.Disconnect -> {
-                    cl.setBackgroundResource(R.color.red2)
+                    cl.setBackgroundColor(ContextCompat.getColor(cl.context,R.color.red2))
                     ivIcon.alpha = 0.2f
                     btn1.isEnabled = false
                     btn2.isEnabled = false
-                    btn1.setBackgroundResource(R.color.gray)
-                    btn2.setBackgroundResource(R.color.gray)
+                    btn1.setBackgroundColor(ContextCompat.getColor(btn1.context,R.color.gray))
+                    btn2.setBackgroundColor(ContextCompat.getColor(btn2.context,R.color.gray))
                 }
             }
         }
