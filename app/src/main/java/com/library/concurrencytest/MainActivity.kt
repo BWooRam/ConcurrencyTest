@@ -75,7 +75,7 @@ class MainActivity : AppCompatActivity() {
         GlobalScope.launch {
             viewModel.sharedFlow.collect{
                 Handler(Looper.getMainLooper()).post {
-                    Log.d("MainActivity", "updateDeviceData topicMessage = $it")
+                    Log.d("MainActivity", "sharedFlow topicMessage = $it")
                     topicRvAdapter?.update(it)
                 }
             }
