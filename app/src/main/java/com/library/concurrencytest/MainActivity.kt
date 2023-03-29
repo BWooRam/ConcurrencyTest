@@ -100,7 +100,6 @@ class MainActivity : AppCompatActivity() {
                 val tag = count.toString()
                 val msg = Random.nextInt(0, 10000)
                 val statusRandomIndex = Random.nextInt(0, 3)
-                Log.d("getTestRunnableList", "statusRandomIndex = $statusRandomIndex")
 
                 val deviceStatus = when(statusRandomIndex){
                     0 -> DeviceStatus.Connect
@@ -110,7 +109,9 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 GlobalScope.launch {
-                    messageChannel.send(TopicMessage(tag, msg.toString(), deviceStatus))
+                    val topicMessage = TopicMessage(tag, msg.toString(), deviceStatus)
+                    Log.d("getTestRunnableList", "runnable statusRandomIndex = $statusRandomIndex, topicMessage = $topicMessage")
+                    messageChannel.send(topicMessage)
                 }
             }
         }
