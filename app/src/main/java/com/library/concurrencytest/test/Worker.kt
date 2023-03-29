@@ -78,7 +78,6 @@ class Worker(
                             runnable?.run()
                         }
                     }
-
                 }
             }
         }, 0, mWorkerInterval)

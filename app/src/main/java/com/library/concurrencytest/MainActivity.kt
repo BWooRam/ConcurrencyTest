@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity() {
             if (worker.isStart())
                 return@setOnClickListener
 
-                worker.work()
+            worker.work()
         }
 
         binding.btn2.setOnClickListener {
