@@ -1,8 +1,7 @@
 package com.library.concurrencytest.test
 
 import android.util.Log
-import android.util.TimeUtils
-import java.text.SimpleDateFormat
+import com.library.concurrencytest.TimeUtils
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.List
@@ -66,8 +65,8 @@ class Worker() {
             val workThread = WorkThread {
                 while (true) {
                     //worker 시작
-                    val secondTime = getSecondTime().toInt()
-                    val currentTime = getTime()
+                    val secondTime = TimeUtils.getSecondTime().toInt()
+                    val currentTime = TimeUtils.getTime()
                     if (secondTime % mWorkerInterval == 0) {
                         Log.d("Worker",
                             "work() secondTime = $secondTime, currentTime = $currentTime")
@@ -100,17 +99,4 @@ class Worker() {
 
     fun isStart() = this@Worker.isStart
 
-    private fun getTime(): String {
-        val currentTime = System.currentTimeMillis()
-        val sdf = SimpleDateFormat("HH:mm:ss")
-        val resultdate = Date(currentTime)
-        return sdf.format(resultdate)
-    }
-
-    private fun getSecondTime(): String {
-        val currentTime = System.currentTimeMillis()
-        val sdf = SimpleDateFormat("ss")
-        val resultdate = Date(currentTime)
-        return sdf.format(resultdate)
-    }
 }

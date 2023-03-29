@@ -31,8 +31,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        initView()
         initEvent()
+        initView()
     }
 
     private fun initView(){
@@ -45,7 +45,8 @@ class MainActivity : AppCompatActivity() {
     private fun initEvent(){
         GlobalScope.launch {
             messageChannel.consumeEach {
-                Log.d("MainActivity", "messageChannel string = $it")
+                val time = TimeUtils.getTime()
+                Log.d("MainActivity", "messageChannel time = $time, topicMessage = $it")
 
                 Handler(Looper.getMainLooper()).post {
                     topicRvAdapter?.update(it)
