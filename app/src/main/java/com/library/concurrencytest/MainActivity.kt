@@ -5,6 +5,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.library.concurrencytest.databinding.ActivityMainBinding
 import com.library.concurrencytest.test.DeviceStatus
 import com.library.concurrencytest.test.TopicMessage
@@ -22,16 +23,21 @@ import kotlin.random.Random
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val worker: Worker = Worker(Dispatchers.IO)
-    private val messageChannel = Channel<TopicMessage>(10, BufferOverflow.DROP_OLDEST)
+    private val messageChannel = Channel<TopicMessage>(20, BufferOverflow.DROP_OLDEST)
     private val count = 20
     private var topicRvAdapter:TopicRvAdapter? = null
+    private lateinit var viewModel:MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        //ViewBinding
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        
+        //ViewModel
+        viewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[MainViewModel::class.java]
+        
+        //Worker 초기화
         worker
             .many(count)
             .interval(1000)
@@ -54,9 +60,14 @@ class MainActivity : AppCompatActivity() {
                 val time = TimeUtils.getTime()
                 Log.d("MainActivity", "messageChannel time = $time, topicMessage = $it")
 
-                Handler(Looper.getMainLooper()).post {
-                    topicRvAdapter?.update(it)
-                }
+                viewModel.postTopicMessageEvent(it)
+            }
+        }
+
+        viewModel.updateDeviceData.observe(this@MainActivity){
+            Handler(Looper.getMainLooper()).post {
+                Log.d("MainActivity", "updateDeviceData topicMessage = $it")
+                topicRvAdapter?.update(it)
             }
         }
 
